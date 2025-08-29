@@ -5,6 +5,14 @@ jobs:
    runs-on: ubuntu-latest
    steps:
     - run: echo "build the project"
+  test:
+   runs-on: ubuntu-latest
+   steps:
+    - run: echo "test the project"
+  deploy:
+   runs-on: ubuntu-latest
+   steps:
+    - run: echo "deploy the project"    
 
 
 
