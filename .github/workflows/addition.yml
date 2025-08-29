@@ -1,20 +1,70 @@
-name: CI workflow
-on: [push]
+name: CI Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   build:
-   runs-on: ubuntu-latest
-   steps:
-    - run: echo "build the project"
-  test:
-   runs-on: ubuntu-latest
-   needs: build
-   steps:
-    - run: echo "test the project"
-  deploy:
-   runs-on: ubuntu-latest
-   needs: test
-   steps:
-    - run: echo "deploy the project"    
+    runs-on: ubuntu-latest   # GitHub gives you a fresh Linux VM
+
+    steps:
+      # 1. Checkout your code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup the programming language (choose one as per project)
+      # Example: Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # Example: Python (uncomment if needed)
+      # - name: Setup Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.11'
+
+      # Example: Java (uncomment if needed)
+      # - name: Setup Java
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     java-version: '17'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then npm install; fi
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f pom.xml ]; then mvn install -DskipTests; fi
+
+      # 4. Run tests
+      - name: Run tests
+        run: |
+          if [ -f package.json ]; then npm test; fi
+          if [ -f requirements.txt ]; then pytest; fi
+          if [ -f pom.xml ]; then mvn test; fi
+
+# name: CI workflow
+# on: [push]
+# jobs:
+#   build:
+#    runs-on: ubuntu-latest
+#    steps:
+#     - run: echo "build the project"
+#   test:
+#    runs-on: ubuntu-latest
+#    needs: build
+#    steps:
+#     - run: echo "test the project"
+#   deploy:
+#    runs-on: ubuntu-latest
+#    needs: test
+#    steps:
+#     - run: echo "deploy the project"    
 
 
 
